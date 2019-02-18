@@ -6,26 +6,23 @@ import java.util.List;
 public class PasswordGenerator {
 
     private String encryption;
+    private int passwordLength;
     private static final String letters = "abcdefghijklmnopqrstuvwxyz";
     private static final String numbers = "1234567890";
     private static final String special = "+%^&/*()?+£$!#@-";
     private boolean foundPassword = false;
-
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     private StringBuilder password = new StringBuilder();
+    private List<String> characterList = new ArrayList<>();
 
-    PasswordGenerator(String encryption) {
+    PasswordGenerator(String encryption, int passwordLength) {
         this.encryption = encryption;
+        this.passwordLength = passwordLength;
     }
 
     public String loopThroughPossibilities() {
-
+        setCharacterListSize();
         for (int i = 0; i < letters.length(); i++) {
-            List<String> characterList = new ArrayList<>();
-            characterList.add("0");
-            characterList.add("0");
-            characterList.add("0");
-
             characterList.set(0, Character.toString(letters.charAt(i)));
             for (int j = 0; j < numbers.length(); j++) {
                 characterList.set(1, Character.toString(numbers.charAt(j)));
@@ -40,34 +37,39 @@ public class PasswordGenerator {
                     if (foundPassword) {
                         return password.toString();
                     }
-                    password.delete(0, 3);
+                    password.delete(0, passwordLength);
                 }
             }
         }
         return password.toString();
     }
 
-    //Had to google how to do the below...
-    public boolean permutation(String str) {
-        return permutation("", str);
+    private void setCharacterListSize() {
+        for (int j = 0; j < passwordLength; j++) {
+            characterList.add("0");
+        }
     }
 
-    private boolean permutation(String prefix, String str) {
-        int n = str.length();
-        if (n == 0) {
-            password.delete(0, password.length());
-            password.append(prefix);
-            System.out.println(password);
-            if (bCryptPasswordEncoder.matches(password,
-                    encryption)) {
-                System.out.println("Password is : " + password);
+    //Had to google how to do the below...
+    public void permutation(String characterCombination) {
+        permutation("", characterCombination);
+    }
+
+    private void permutation(String prefix, String characterCombination) {
+        int characterCombinationLength = characterCombination.length();
+        if (characterCombinationLength == 0) {
+            this.password.delete(0, this.password.length());
+            this.password.append(prefix);
+            System.out.println(this.password);
+
+            if (bCryptPasswordEncoder.matches(this.password, encryption)) {
                 foundPassword = true;
-                return true;
             }
-        } else {
-            for (int i = 0; i < n; i++)
-                permutation(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n));
         }
-        return false;
+        else {
+            for (int i = 0; i < characterCombinationLength; i++)
+                permutation(prefix + characterCombination.charAt(i),
+                        characterCombination.substring(0, i) + characterCombination.substring(i + 1, characterCombinationLength));
+        }
     }
 }

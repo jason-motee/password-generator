@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordGeneratorTest {
 
-    PasswordGenerator passwordGenerator = new PasswordGenerator("$2a$10$XEaF37eD5O4aLMtD30s1ouJencvNY3hPb1T5cPYzhmwwIYfLRwq0u");
+    PasswordGenerator passwordGenerator = new PasswordGenerator("$2a$10$XEaF37eD5O4aLMtD30s1ouJencvNY3hPb1T5cPYzhmwwIYfLRwq0u", 3);
 
     @Test
     public void crackPassword() {
