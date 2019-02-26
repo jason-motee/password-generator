@@ -3,19 +3,36 @@
  */
 
 import org.junit.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordGeneratorTest {
 
-    PasswordGenerator passwordGenerator = new PasswordGenerator("$2a$10$XEaF37eD5O4aLMtD30s1ouJencvNY3hPb1T5cPYzhmwwIYfLRwq0u", 3);
+    PasswordGenerator passwordGenerator = new PasswordGenerator(10,2,2);
 
     @Test
-    public void crackPassword() {
-        assertThat(passwordGenerator.loopThroughPossibilities()).isEqualTo("/3e");
+    public void generatesAllLetters() {
+        String allAlphabet = "[a, A, b, B, c, C, d, D, e, E, f, F, g, G, h, H, i, I, j, J, k, K, l, L, m, M, n, N, o, O, p, P, q, Q, r, R, s, S, t, T, u, U, v, V, w, W, x, X, y, Y, z, Z]";
+        assertThat(passwordGenerator.getLetters().toString()).isEqualTo(allAlphabet);
     }
 
+    @Test
+    public void generatesAllNumbers() {
+        String numbers = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]";
+        assertThat(passwordGenerator.getDigits().toString()).isEqualTo(numbers);
+    }
 
+    @Test
+    public void generatesAllSpecial() {
+        char[] passwordSpecial = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~".toCharArray();
+        for (char character:passwordSpecial) {
+            assertThat(passwordGenerator.getSpecial().toString()).contains(Character.toString(character));
+        }
+    }
+
+    @Test
+    public void generatesPassword() {
+        System.out.println(passwordGenerator.getPassword());
+        //assertThat(passwordGenerator.getPassword()).contains(Character.toString(character));
+    }
 }
-

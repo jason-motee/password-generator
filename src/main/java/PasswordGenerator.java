@@ -1,75 +1,88 @@
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PasswordGenerator {
 
-    private String encryption;
+
+    private List<String> letters = new ArrayList<>();
+    private List<String> digits = new ArrayList<>();
+    private List<String> special = new ArrayList<>();
+    private String specialString = "!@#$%&*()_+-=[]|,./?><";
     private int passwordLength;
-    private static final String letters = "abcdefghijklmnopqrstuvwxyz";
-    private static final String numbers = "1234567890";
-    private static final String special = "+%^&/*()?+£$!#@-";
-    private boolean foundPassword = false;
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private int numberOfDigits;
+    private int numberOfSpecial;
     private StringBuilder password = new StringBuilder();
-    private List<String> characterList = new ArrayList<>();
 
-    PasswordGenerator(String encryption, int passwordLength) {
-        this.encryption = encryption;
+
+    public List<String> getLetters() {
+        return letters;
+    }
+
+    public List<String> getDigits() {
+        return digits;
+    }
+
+    public List<String> getSpecial() {
+        return special;
+    }
+
+    public PasswordGenerator(int passwordLength, int numberOfDigits, int numberOfSpecial) {
+        generateLetters();
+        generateNumbers();
+        generateSpecial();
         this.passwordLength = passwordLength;
+        this.numberOfDigits = numberOfDigits;
+        this.numberOfSpecial = numberOfSpecial;
+        generatePassword();
     }
 
-    public String loopThroughPossibilities() {
-        setCharacterListSize();
-        for (int i = 0; i < letters.length(); i++) {
-            characterList.set(0, Character.toString(letters.charAt(i)));
-            for (int j = 0; j < numbers.length(); j++) {
-                characterList.set(1, Character.toString(numbers.charAt(j)));
-                for (int k = 0; k < special.length(); k++) {
-                    characterList.set(2, Character.toString(special.charAt(k)));
+    public void generatePassword() {
+        List<String> password = new ArrayList<>();
 
-                    for (String character : characterList) {
-                        password.append(character);
-                    }
-
-                    permutation(password.toString());
-                    if (foundPassword) {
-                        return password.toString();
-                    }
-                    password.delete(0, passwordLength);
-                }
-            }
+        for (int i = 0; i < numberOfDigits; i++) {
+            Collections.shuffle(digits);
+            password.add(digits.get(0));
         }
-        return password.toString();
-    }
 
-    private void setCharacterListSize() {
-        for (int j = 0; j < passwordLength; j++) {
-            characterList.add("0");
+        for (int i = 0; i < numberOfSpecial; i++) {
+            Collections.shuffle(special);
+            password.add(special.get(0));
+        }
+
+        while(password.size() < passwordLength) {
+            Collections.shuffle(letters);
+            password.add(letters.get(0));
+
+        }
+
+        Collections.shuffle(password);
+
+        for (String character:password) {
+            this.password.append(character);
         }
     }
 
-    //Had to google how to do the below...
-    public void permutation(String characterCombination) {
-        permutation("", characterCombination);
+    private void generateLetters() {
+        for (char letter = 'a'; letter <= 'z'; letter++) {
+            letters.add(Character.toString(letter));
+            letters.add(Character.toString(letter).toUpperCase());
+        }
     }
 
-    private void permutation(String prefix, String characterCombination) {
-        int characterCombinationLength = characterCombination.length();
-        if (characterCombinationLength == 0) {
-            this.password.delete(0, this.password.length());
-            this.password.append(prefix);
-            System.out.println(this.password);
+    private void generateNumbers() {
+        for (int number = 0; number <= 9; number++) {
+            digits.add(String.valueOf(number));
+        }
+    }
 
-            if (bCryptPasswordEncoder.matches(this.password, encryption)) {
-                foundPassword = true;
-            }
-        }
-        else {
-            for (int i = 0; i < characterCombinationLength; i++)
-                permutation(prefix + characterCombination.charAt(i),
-                        characterCombination.substring(0, i) + characterCombination.substring(i + 1, characterCombinationLength));
-        }
+    private void generateSpecial() {
+        String[] specialArray = specialString.split("");
+        special.addAll(Arrays.asList(specialArray));
+    }
+
+    public StringBuilder getPassword() {
+        return password;
     }
 }
