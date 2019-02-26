@@ -8,7 +8,6 @@ public class PasswordGenerator {
     private List<String> letters = new ArrayList<>();
     private List<String> digits = new ArrayList<>();
     private List<String> special = new ArrayList<>();
-    private String specialString = "!@#$%&*()_+-=[]|,./?><";
     private int passwordLength;
     private int numberOfDigits;
     private int numberOfSpecial;
@@ -69,6 +68,7 @@ public class PasswordGenerator {
     }
 
     private void generateSpecial() {
+        String specialString = "!@#$%&*()_+-=[]|,./?><";
         String[] specialArray = specialString.split("");
         special.addAll(Arrays.asList(specialArray));
     }
