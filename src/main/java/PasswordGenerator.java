@@ -14,12 +14,12 @@ public class PasswordGenerator {
     private StringBuilder password = new StringBuilder();
 
     public PasswordGenerator(int passwordLength, int numberOfDigits, int numberOfSpecial) {
-        generateLetters();
-        generateNumbers();
-        generateSpecial();
         this.passwordLength = passwordLength;
         this.numberOfDigits = numberOfDigits;
         this.numberOfSpecial = numberOfSpecial;
+        generateLetters();
+        generateNumbers();
+        generateSpecial();
         generatePassword();
     }
 
@@ -35,12 +35,8 @@ public class PasswordGenerator {
         }
     }
 
-    private void addLettersToPassword(List<String> password) {
-        while(password.size() < passwordLength) {
-            Collections.shuffle(letters);
-            password.add(letters.get(0));
-
-        }
+    private void addDigitsToPassword(List<String> password, int numberOfDigits, List<String> digits) {
+        addSpecialToPassword(password, numberOfDigits, digits);
     }
 
     private void addSpecialToPassword(List<String> password, int numberOfSpecial, List<String> special) {
@@ -50,8 +46,11 @@ public class PasswordGenerator {
         }
     }
 
-    private void addDigitsToPassword(List<String> password, int numberOfDigits, List<String> digits) {
-        addSpecialToPassword(password, numberOfDigits, digits);
+    private void addLettersToPassword(List<String> password) {
+        while(password.size() < passwordLength) {
+            Collections.shuffle(letters);
+            password.add(letters.get(0));
+        }
     }
 
     private void generateLetters() {
