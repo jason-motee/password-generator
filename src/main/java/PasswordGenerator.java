@@ -5,7 +5,6 @@ import java.util.List;
 
 public class PasswordGenerator {
 
-
     private List<String> letters = new ArrayList<>();
     private List<String> digits = new ArrayList<>();
     private List<String> special = new ArrayList<>();
@@ -14,8 +13,6 @@ public class PasswordGenerator {
     private int numberOfDigits;
     private int numberOfSpecial;
     private StringBuilder password = new StringBuilder();
-
-
 
     public PasswordGenerator(int passwordLength, int numberOfDigits, int numberOfSpecial) {
         generateLetters();
