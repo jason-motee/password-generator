@@ -40,28 +40,33 @@ public class PasswordGenerator {
 
     public void generatePassword() {
         List<String> password = new ArrayList<>();
+        addDigitsToPassword(password, numberOfDigits, digits);
+        addSpecialToPassword(password, numberOfSpecial, special);
+        addLettersToPassword(password);
 
-        for (int i = 0; i < numberOfDigits; i++) {
-            Collections.shuffle(digits);
-            password.add(digits.get(0));
+        Collections.shuffle(password);
+        for (String character:password) {
+            this.password.append(character);
         }
+    }
 
-        for (int i = 0; i < numberOfSpecial; i++) {
-            Collections.shuffle(special);
-            password.add(special.get(0));
-        }
-
+    private void addLettersToPassword(List<String> password) {
         while(password.size() < passwordLength) {
             Collections.shuffle(letters);
             password.add(letters.get(0));
 
         }
+    }
 
-        Collections.shuffle(password);
-
-        for (String character:password) {
-            this.password.append(character);
+    private void addSpecialToPassword(List<String> password, int numberOfSpecial, List<String> special) {
+        for (int i = 0; i < numberOfSpecial; i++) {
+            Collections.shuffle(special);
+            password.add(special.get(0));
         }
+    }
+
+    private void addDigitsToPassword(List<String> password, int numberOfDigits, List<String> digits) {
+        addSpecialToPassword(password, numberOfDigits, digits);
     }
 
     private void generateLetters() {
