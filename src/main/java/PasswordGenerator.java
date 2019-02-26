@@ -16,17 +16,6 @@ public class PasswordGenerator {
     private StringBuilder password = new StringBuilder();
 
 
-    public List<String> getLetters() {
-        return letters;
-    }
-
-    public List<String> getDigits() {
-        return digits;
-    }
-
-    public List<String> getSpecial() {
-        return special;
-    }
 
     public PasswordGenerator(int passwordLength, int numberOfDigits, int numberOfSpecial) {
         generateLetters();
@@ -89,5 +78,17 @@ public class PasswordGenerator {
 
     public StringBuilder getPassword() {
         return password;
+    }
+
+    public List<String> getLetters() {
+        return letters;
+    }
+
+    public List<String> getDigits() {
+        return digits;
+    }
+
+    public List<String> getSpecial() {
+        return special;
     }
 }
